@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.sp
 import com.adenikinju.storeapp.data.screenItems.HomeSection
 
 
-val verticalPadding = 12.dp
-val horizontalPadding = 10.dp
+val verticalPadding = 15.dp
+val horizontalPadding = 15.dp
 val bottomBarHeight = 50.dp
 val allPadding = 15.dp
 val headerFontSize = 20.sp

@@ -18,6 +18,9 @@ class HomeViewModel @Inject constructor(
     private val _storeItems = MutableStateFlow<List<storeitemsmodelItem>>(emptyList())
     val storeItems: StateFlow<List<storeitemsmodelItem>> = _storeItems
 
+    private val _storeItem = MutableStateFlow<storeitemsmodelItem?>(null)
+    val storeItem: StateFlow<storeitemsmodelItem?> = _storeItem
+
 
     init {
         getAllItems()
@@ -35,6 +38,20 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun getSingleItemApi(id: Int){
+        viewModelScope.launch {
+            try {
+                val result = repository.getSingleItem(id)
+                Log.e("HomeViewModel", "getAllItems: $result")
+                _storeItem.emit(result)
+            } catch (e: Exception) {
+                // Handle error
+                print(e.message)
+            }
+        }
+    }
+
 
     fun getSingleItem(id: Int): storeitemsmodelItem? {
         val result = _storeItems.value.find {

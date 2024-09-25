@@ -1,6 +1,7 @@
 package com.adenikinju.storeapp.presentation.ui
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.adenikinju.storeapp.data.screenItems.HomeSection
 import com.adenikinju.storeapp.presentation.Screens.CategoryScreen
 import com.adenikinju.storeapp.presentation.Screens.HomeScreen
@@ -29,7 +31,10 @@ fun Home(){
             currentSection = sectionState.value,
             onSectionSelected = {sectionState.value = it}
         ) },
-        modifier = Modifier.padding(WindowInsets.navigationBars.asPaddingValues())
+        modifier = Modifier
+            .padding(WindowInsets.navigationBars.asPaddingValues())
+            .background(Color.White),
+        containerColor = Color.White
     ) { innerPadding ->
         Crossfade(
             targetState = sectionState.value,
