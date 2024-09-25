@@ -1,5 +1,6 @@
 package com.adenikinju.storeapp.presentation.Screens
 
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,9 +36,13 @@ import com.adenikinju.storeapp.presentation.viewmodel.HomeViewModel
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        homeViewModel.getAllItems()
-    }
+    val storeItems by homeViewModel.storeItems.collectAsState()
+
+//    val singleItem = homeViewModel.getSingleItem(1)
+    Log.e("singleItem", "singleitem: ${storeItems[1]}")
+//    LaunchedEffect(Unit) {
+//        val singleItem = homeViewModel.getSingleItem(1)
+//    }
     Column(
         modifier = Modifier.fillMaxSize(1f)
     ) {

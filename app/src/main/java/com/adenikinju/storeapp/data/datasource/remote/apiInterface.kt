@@ -7,11 +7,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface apiInterface {
-
     @GET("products")
-    suspend fun getAllItems(): storeitemsmodel
+    suspend fun getAllItems(): List<storeitemsmodelItem>
 
-    @GET("/products/{id}")
+    @GET("products/{id}")
     suspend fun getSingleItem(@Path("id")id: Int): storeitemsmodelItem
 
 }

@@ -1,5 +1,6 @@
 package com.adenikinju.storeapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adenikinju.storeapp.data.models.storeitemsmodelItem
@@ -17,17 +18,20 @@ class HomeViewModel @Inject constructor(
     private val _storeItems = MutableStateFlow<List<storeitemsmodelItem>>(emptyList())
     val storeItems: StateFlow<List<storeitemsmodelItem>> = _storeItems
 
+
     init {
         getAllItems()
     }
 
-    fun getAllItems() {
+    private fun getAllItems() {
         viewModelScope.launch {
             try {
                 val result = repository.getAllItems()
-                _storeItems.value = result
+                Log.e("HomeViewModel", "getAllItems: $result")
+                _storeItems.emit(result)
             } catch (e: Exception) {
                 // Handle error
+                print(e.message)
             }
         }
     }
