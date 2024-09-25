@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.adenikinju.storeapp.R
+import com.adenikinju.storeapp.data.models.storeitemsmodel
 import com.adenikinju.storeapp.data.models.storeitemsmodelItem
 import com.adenikinju.storeapp.presentation.components.allPadding
 import com.adenikinju.storeapp.presentation.components.headerFontSize
@@ -49,91 +51,98 @@ fun HomeScreen(
         homeViewModel.getSingleItemApi(20)
     }
     val allItems = homeViewModel.storeItems.collectAsState().value
+    val highRated = allItems.filter { it ->
+        it.rating?.rate!! >= 4.0
+    }
+    val budgetFriendly = allItems.filter { it ->
+        it.price!! <= 20.0
+    }
     val singleItem = homeViewModel.storeItem.collectAsState().value
-    Column(
+    LazyColumn(
         modifier = Modifier.fillMaxSize(1f)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(1f)
-                .padding(all = allPadding),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Store4Live.",
-                fontWeight = FontWeight.Bold,
-                fontSize = headerFontSize
-            )
-            Row {
-                Icon(
-                    ImageVector.vectorResource(R.drawable.baseline_email_24),
-                    contentDescription = "email"
-                )
-                Spacer(Modifier.padding(end = 5.dp))
-                Icon(
-                    ImageVector.vectorResource(R.drawable.baseline_notifications_24),
-                    contentDescription = "notifications"
-                )
-            }
-        }
-        singleItem?.let { item ->
-            Box(
+        item(1) {
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-                    .background(Color.Blue)
+                    .fillMaxWidth(1f)
+                    .padding(all = allPadding),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(
-                    painter = rememberImagePainter(
-                        data = item.image,
-                        builder = {
-                            crossfade(true)
-                        }
-                    ),
-                    contentDescription = "Item Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize(),
+                Text(
+                    text = "Store4Live.",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = headerFontSize
                 )
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize(1f)
-                        .background(Color(195, 197, 202, 190))
-                ) {}
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize(1f)
-                        .background(Color.Transparent),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Explore our Fall Items",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = headerFontSize,
+                Row {
+                    Icon(
+                        ImageVector.vectorResource(R.drawable.baseline_email_24),
+                        contentDescription = "email"
+                    )
+                    Spacer(Modifier.padding(end = 5.dp))
+                    Icon(
+                        ImageVector.vectorResource(R.drawable.baseline_notifications_24),
+                        contentDescription = "notifications"
                     )
                 }
             }
+            singleItem?.let { item ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                        .background(Color.Blue)
+                ) {
+                    Image(
+                        painter = rememberImagePainter(
+                            data = item.image,
+                            builder = {
+                                crossfade(true)
+                            }
+                        ),
+                        contentDescription = "Item Image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize(),
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize(1f)
+                            .background(Color(195, 197, 202, 190))
+                    ) {}
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize(1f)
+                            .background(Color.Transparent),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Explore our Fall Items",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = headerFontSize,
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.padding(vertical = verticalPadding))
+            ComponentRow1(highRated, "Highly Rated")
+            Spacer(modifier = Modifier.padding(vertical = verticalPadding))
+            ComponentRow1(budgetFriendly, "Budget Friendly")
         }
-        Spacer(modifier = Modifier.padding(vertical = verticalPadding))
-        componentRow1(allItems)
-
     }
+
 
 }
 
 @Composable
-fun componentRow1(rowItem: List<storeitemsmodelItem>) {
-    val highRated = rowItem.filter { it ->
-        it.rating?.rate!! >= 4.0
-    }
+fun ComponentRow1(rowItem: List<storeitemsmodelItem>, sectionName: String) {
     Row(
         modifier = Modifier
             .padding(horizontal = horizontalPadding)
     ) {
         Text(
-            text = "Highly Rated",
+            text = sectionName,
             fontWeight = FontWeight.Bold,
             fontSize = headerFontSize
         )
@@ -142,7 +151,7 @@ fun componentRow1(rowItem: List<storeitemsmodelItem>) {
         modifier = Modifier
             .padding(vertical = verticalPadding)
     ) {
-        items(highRated.size) { item ->
+        items(rowItem.size) { item ->
             Column(
                 modifier = Modifier
                     .height(300.dp)
@@ -152,39 +161,39 @@ fun componentRow1(rowItem: List<storeitemsmodelItem>) {
                 Row(
                     modifier = Modifier
                         .height(200.dp)
-                        .background(Color(248,250,252))
-                        .fillMaxWidth(1f)
-                        .padding(vertical = verticalPadding)
-                    ,
+                        .background(Color(248, 250, 252))
+                        .fillMaxWidth(1f),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Bottom,
-                ){
+                ) {
                     Image(
                         painter = rememberImagePainter(
-                            data = highRated[item].image,
+                            data = rowItem[item].image,
                             builder = {
                                 crossfade(true)
                             }
                         ),
-                        modifier = Modifier.fillMaxSize(.8f)
-                            .background(Color.Transparent)
-                        ,
+                        modifier = Modifier
+                            .fillMaxSize(.8f)
+                            .background(Color.Transparent),
                         contentDescription = "Item Image",
                         contentScale = ContentScale.Crop,
                     )
                 }
 
-                Column {
+                Column(
+                    modifier = Modifier.padding(top = verticalPadding)
+                ) {
                     Text(
-                        text = highRated[item].title.toString(),
+                        text = rowItem[item].title.toString(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
                     )
                     Text(
-                        text = "$${highRated[item].price}",
+                        text = "$${rowItem[item].price}",
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
-                        color = Color(5,150,105)
+                        color = Color(5, 150, 105)
                     )
                 }
             }
