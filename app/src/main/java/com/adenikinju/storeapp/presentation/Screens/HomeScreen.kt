@@ -149,18 +149,31 @@ fun componentRow1(rowItem: List<storeitemsmodelItem>) {
                     .width(200.dp)
                     .padding(horizontal = horizontalPadding)
             ) {
-                Image(
-                    painter = rememberImagePainter(
-                        data = highRated[item].image,
-                        builder = {
-                            crossfade(true)
-                        }
-                    ),
-                    contentDescription = "Item Image",
-                    contentScale = ContentScale.Crop,
+                Row(
                     modifier = Modifier
-                        .height(200.dp),
-                )
+                        .height(200.dp)
+                        .background(Color(248,250,252))
+                        .fillMaxWidth(1f)
+                        .padding(vertical = verticalPadding)
+                    ,
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Bottom,
+                ){
+                    Image(
+                        painter = rememberImagePainter(
+                            data = highRated[item].image,
+                            builder = {
+                                crossfade(true)
+                            }
+                        ),
+                        modifier = Modifier.fillMaxSize(.8f)
+                            .background(Color.Transparent)
+                        ,
+                        contentDescription = "Item Image",
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+
                 Column {
                     Text(
                         text = highRated[item].title.toString(),
